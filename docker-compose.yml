@@ -1,0 +1,25 @@
+version: "2.27.0"
+
+services:
+  api:
+    image: api
+    container_name: web_api
+    ports:
+      - "5001:80"
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - localhost
+
+  localhost:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: localhost_sql_server
+    ports:
+      - "8833:1433"
+
+    environment:
+      # ConnectionStrings__DefaultConnection: "Server=localhost;Database=ApiDb;User Id=SA;Password=Espiral,1291;TrustServerCertificate=True;"
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Espiral,1291"

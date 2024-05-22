@@ -1,0 +1,84 @@
+USE ApiDb;
+
+CREATE TABLE [dbo].[Articulos](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Codigo] [nvarchar](max) NOT NULL,
+	[Nombre] [nvarchar](max) NOT NULL,
+	[Precio] [decimal](18, 2) NOT NULL,
+	[AplicaIVA] [bit] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Articulos] ADD  CONSTRAINT [PK_Articulos] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+////////////////Usuarios
+CREATE TABLE [dbo].[Usuarios](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](max) NOT NULL,
+	[Password] [nvarchar](max) NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Usuarios] ADD  CONSTRAINT [PK_Usuarios] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+///////////////////Facturas
+CREATE TABLE [dbo].[Facturas](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Fecha] [datetime2](7) NOT NULL
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Facturas] ADD  CONSTRAINT [PK_Facturas] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+///////////////////FacturaDetalles
+CREATE TABLE [dbo].[FacturaDetalles](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[FacturaId] [int] NOT NULL,
+	[Codigo] [nvarchar](max) NOT NULL,
+	[Nombre] [nvarchar](max) NOT NULL,
+	[Cantidad] [int] NOT NULL,
+	[Precio] [decimal](18, 2) NOT NULL,
+	[IVA] [decimal](18, 2) NULL,
+	[Total] [decimal](18, 2) NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[FacturaDetalles] ADD  CONSTRAINT [PK_FacturaDetalles] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_FacturaDetalles_FacturaId] ON [dbo].[FacturaDetalles]
+(
+	[FacturaId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[FacturaDetalles]  WITH CHECK ADD  CONSTRAINT [FK_FacturaDetalles_Facturas_FacturaId] FOREIGN KEY([FacturaId])
+REFERENCES [dbo].[Facturas] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[FacturaDetalles] CHECK CONSTRAINT [FK_FacturaDetalles_Facturas_FacturaId]
+GO
+
+/////////////////EFMigrationsHistory
+
+CREATE TABLE [dbo].[__EFMigrationsHistory](
+	[MigrationId] [nvarchar](150) NOT NULL,
+	[ProductVersion] [nvarchar](32) NOT NULL
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+ALTER TABLE [dbo].[__EFMigrationsHistory] ADD  CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY CLUSTERED 
+(
+	[MigrationId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
